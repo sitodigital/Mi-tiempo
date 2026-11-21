@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07182d">
+  <meta name="description" content="El tiempo en tu ubicación o en cualquier ciudad, con previsión horaria y para los próximos siete días.">
+  <title>Mi Tiempo</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%230b2340'/%3E%3Ccircle cx='25' cy='25' r='11' fill='%23f5bd69'/%3E%3Cg stroke='%23f5bd69' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M25 7v4m0 28v4M7 25h4m28 0h4M12.3 12.3l2.8 2.8m19.8 19.8 2.8 2.8m0-25.4-2.8 2.8m-19.8 19.8-2.8 2.8'/%3E%3C/g%3E%3Cpath d='M23 48h22a9 9 0 0 0 0-18 12 12 0 0 0-23-2 10 10 0 0 0 1 20Z' fill='%23dce9f5'/%3E%3C/svg%3E">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap');
+    :root{color-scheme:dark;--night:#07182d;--line:rgba(202,225,246,.13);--muted:#9aafc4;--paper:#eff6fc;--gold:#f2bd70;--mint:#9bd4c1;--mono:'DM Mono',monospace;--sans:'Manrope',sans-serif;--serif:'Newsreader',serif}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;color:var(--paper);font-family:var(--sans);background:radial-gradient(ellipse at 50% -24%,#254566 0%,transparent 55%),radial-gradient(ellipse at 95% 48%,rgba(28,71,105,.25),transparent 35%),linear-gradient(155deg,#0c2340 0%,#07182d 54%,#091b31 100%);background-attachment:fixed;overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E")}
+    .shell{width:min(100% - 48px,640px);margin-inline:auto} header{height:86px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.19em;font-size:13px}.brand-mark{width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(242,189,112,.4);border-radius:50%;color:var(--gold);font-size:16px}.byline{font-size:11px;letter-spacing:.015em;color:#9db0c2}
+    main{padding:36px 0 66px}.eyebrow{font:11px var(--mono);letter-spacing:.15em;text-transform:uppercase;color:var(--mint)}.location-line{display:flex;align-items:center;gap:9px;color:#dbe6f0;font-size:14px;font-weight:600}.location-line svg{color:var(--gold)}.topline{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.local-clock{font:11px var(--mono);color:var(--muted)}
+    .current{position:relative;overflow:hidden;min-height:265px;padding:31px 33px 28px;border:1px solid rgba(196,221,243,.18);border-radius:18px;background:linear-gradient(112deg,rgba(31,65,95,.86),rgba(16,41,67,.64));box-shadow:0 24px 60px rgba(0,0,0,.16);animation:rise .65s both}.current:after{content:"";position:absolute;width:270px;height:270px;right:-40px;top:-91px;border-radius:50%;background:radial-gradient(circle,rgba(242,189,112,.13),transparent 68%);pointer-events:none}.current-content{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between}.current-temp{font-size:90px;line-height:1;letter-spacing:-.085em;font-weight:500;margin:17px 0 9px}.current-temp sup{font-size:26px;letter-spacing:0;vertical-align:top;margin:12px 0 0 5px;color:#cad9e6}.description{font:24px var(--serif);color:#f0f4f6}.feels{margin-top:8px;color:#a9bdcf;font-size:12px}.weather-art{width:142px;height:142px;filter:drop-shadow(0 15px 24px rgba(3,11,20,.2));flex:none;margin-right:16px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);margin-top:25px;padding-top:19px;border-top:1px solid rgba(202,225,246,.12)}.metric{padding-left:18px;border-left:1px solid rgba(202,225,246,.13)}.metric:first-child{padding-left:0;border:0}.metric-label{font:10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#92a9be}.metric-value{font-size:14px;font-weight:700;margin-top:6px}
+    .ad{margin:19px 0 40px;min-height:60px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;color:#0b2c2a;border-radius:12px;background:linear-gradient(110deg,#b7e0c7,#a4d6bd);transition:transform .2s,filter .2s;box-shadow:0 8px 24px rgba(2,17,29,.12)}.ad:hover{transform:translateY(-2px);filter:brightness(1.06)}.ad-left{display:flex;gap:11px;align-items:center}.ad-symbol{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:rgba(14,57,48,.1);font-size:17px}.ad-kicker{font:9px var(--mono);letter-spacing:.13em;text-transform:uppercase;opacity:.72}.ad-title{font-weight:800;font-size:13px;margin-top:2px}.ad-arrow{font-size:20px;font-weight:500;margin-right:2px}
+    .section{margin-top:37px;animation:rise .7s .08s both}.section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:14px}.section-title{font:22px var(--serif);font-weight:500;letter-spacing:-.02em}.section-note{font:10px var(--mono);color:var(--muted);letter-spacing:.05em}.hourly{display:flex;gap:9px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:thin;scrollbar-color:rgba(151,182,208,.38) transparent}.hour{flex:0 0 77px;min-height:118px;text-align:center;padding:13px 8px 11px;border:1px solid var(--line);border-radius:12px;background:rgba(17,43,69,.56)}.hour:first-child{border-color:rgba(242,189,112,.38);background:rgba(35,65,91,.76)}.hour-time{font:10px var(--mono);color:#a8bbcc}.hour-icon{width:27px;height:27px;margin:9px auto 7px;color:var(--gold)}.hour-temp{font-size:14px;font-weight:700}.hour-rain{font:9px var(--mono);color:#9dcfda;margin-top:6px;min-height:11px}
+    .week{display:grid;gap:7px}.day{display:grid;grid-template-columns:1.1fr 1fr 38px .65fr 1fr;align-items:center;gap:8px;width:100%;text-align:left;color:var(--paper);border:1px solid transparent;border-radius:11px;padding:11px 13px;background:rgba(17,43,69,.48);font:inherit;cursor:pointer;transition:.18s}.day:hover,.day.selected{background:rgba(36,70,98,.76);border-color:rgba(194,220,241,.16)}.day.selected{box-shadow:inset 2px 0 var(--gold)}.day-name{font-size:12px;font-weight:700}.day-desc{font-size:10px;color:#a8bbcc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.day-icon{width:24px;height:24px;color:var(--gold);justify-self:center}.day-temp{font:11px var(--mono);color:#a9bdcf;text-align:right}.day-temp strong{font-weight:500;color:#f3f6f8}.detail{margin-top:13px;padding:17px 18px;border-radius:12px;border:1px solid rgba(242,189,112,.19);background:linear-gradient(110deg,rgba(70,79,82,.24),rgba(18,44,68,.55));display:flex;align-items:center;justify-content:space-between;gap:14px}.detail-day{font:18px var(--serif)}.detail-desc{color:#a9bdcf;font-size:11px;margin-top:4px}.detail-values{display:flex;gap:20px}.detail-value small{display:block;font:9px var(--mono);letter-spacing:.08em;color:var(--muted);text-transform:uppercase}.detail-value strong{display:block;font-size:17px;margin-top:4px;font-weight:600}
+    .state{padding:52px 24px;text-align:center;border:1px solid var(--line);border-radius:16px;background:rgba(16,40,65,.56)}.state h2{font:25px var(--serif);margin:0 0 8px}.state p{color:#a9bdcf;font-size:13px;line-height:1.6;margin:0 auto 19px;max-width:390px}.spinner{width:30px;height:30px;border:2px solid rgba(216,234,247,.2);border-top-color:var(--gold);border-radius:50%;margin:0 auto 18px;animation:spin .8s linear infinite}.button{border:1px solid rgba(242,189,112,.45);border-radius:30px;background:rgba(242,189,112,.1);color:#f3d4a5;font:11px var(--mono);letter-spacing:.04em;padding:10px 17px;cursor:pointer;margin:5px}.button:hover{background:rgba(242,189,112,.19)}.hidden{display:none!important}
+    .search-form{display:flex;gap:9px;margin:0 auto 8px;max-width:390px}.search-form input{flex:1;min-width:0;border:1px solid rgba(202,225,246,.2);border-radius:30px;background:rgba(10,28,48,.65);color:var(--paper);font:13px var(--sans);padding:11px 17px;outline:none}.search-form input:focus{border-color:rgba(242,189,112,.55)}.search-form input::placeholder{color:#7d93a8}
+    footer{min-height:75px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;color:#849cb2;font-size:10px;letter-spacing:.025em}footer span:last-child{font:10px var(--mono);color:#758da5}
+    .install-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 20px;padding:13px 15px;border:1px solid rgba(242,189,112,.28);border-radius:13px;background:linear-gradient(110deg,rgba(31,65,95,.88),rgba(16,41,67,.78));box-shadow:0 12px 30px rgba(0,0,0,.12)}.install-copy{font-size:12px;color:#d8e5f0;line-height:1.5}.install-copy strong{display:block;color:#f3d4a5;font-size:13px}.install-actions{display:flex;align-items:center;gap:8px;flex:none}.install-button{border:1px solid rgba(242,189,112,.5);border-radius:24px;background:rgba(242,189,112,.13);color:#f3d4a5;font:11px var(--mono);padding:9px 13px;cursor:pointer}.install-button:hover{background:rgba(242,189,112,.23)}.install-close{width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:#a9bdcf;font-size:20px;cursor:pointer}.install-close:hover{background:rgba(202,225,246,.1);color:#fff}
+    @keyframes spin{to{transform:rotate(360deg)}}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@media(max-width:480px){.shell{width:calc(100% - 32px)}header{height:72px}.byline{font-size:9px}.brand{font-size:12px;gap:8px}.brand-mark{width:30px;height:30px}.topline{align-items:flex-start;gap:10px;flex-direction:column;margin-bottom:18px}.current{padding:24px 21px 21px;min-height:240px}.current-temp{font-size:76px}.weather-art{width:105px;height:105px;margin:0 -5px 0 0}.description{font-size:22px}.metric{padding-left:11px}.metric-label{font-size:9px}.metric-value{font-size:12px}.ad{margin-bottom:34px}.section-title{font-size:20px}.section-note{font-size:9px}.day{grid-template-columns:.9fr 1fr 30px .55fr .85fr;gap:5px;padding:10px 8px}.day-desc{font-size:9px}.day-name{font-size:11px}.day-temp{font-size:10px}.detail{align-items:flex-start;flex-direction:column}.detail-values{width:100%;justify-content:space-between}.hour{flex-basis:70px}main{padding-top:27px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand"><span class="brand-mark" aria-hidden="true">☼</span><span>EL TIEMPO</span></div>
+      <div class="byline">Creado por Alfonso M. Martín Boza</div>
+    </header>
+    <main>
+      <aside id="install-banner" class="install-banner hidden" aria-label="Instalar aplicación">
+        <div class="install-copy"><strong>El Tiempo, siempre a mano</strong>Instala la app para acceder rápidamente desde tu dispositivo.</div>
+        <div class="install-actions"><button id="install-app" class="install-button" type="button">Instalar app</button><button id="dismiss-install" class="install-close" type="button" aria-label="Cerrar aviso">×</button></div>
+      </aside>
+      <section id="loading" class="state" aria-live="polite"><div class="spinner" aria-hidden="true"></div><h2>Buscando tu cielo</h2><p>Obteniendo tu ubicación y preparando la previsión local.</p></section>
+      <section id="error" class="state hidden" aria-live="polite">
+        <h2 id="error-title">No pudimos cargar el tiempo</h2>
+        <p id="error-message"></p>
+        <form id="city-form" class="search-form">
+          <input id="city-input" type="text" placeholder="Escribe tu ciudad… (ej. Sevilla)" autocomplete="off">
+          <button class="button" type="submit">Buscar</button>
+        </form>
+        <button class="button" id="retry" type="button">Usar mi ubicación</button>
+      </section>
+      <div id="weather" class="hidden">
+        <div class="topline"><div class="location-line"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.7"/></svg><span id="location">Tu ubicación</span></div><div id="updated" class="local-clock"></div></div>
+        <section class="current" aria-label="Tiempo actual"><div class="current-content"><div><div class="eyebrow">AHORA MISMO</div><div id="current-temp" class="current-temp">—</div><div id="current-desc" class="description">—</div><div id="feels" class="feels"></div></div><div id="current-icon" class="weather-art" aria-hidden="true"></div></div><div class="metrics"><div class="metric"><div class="metric-label">Viento</div><div id="wind" class="metric-value">—</div></div><div class="metric"><div class="metric-label">Humedad</div><div id="humidity" class="metric-value">—</div></div><div class="metric"><div class="metric-label">Prob. lluvia</div><div id="rain-current" class="metric-value">—</div></div></div></section>
+        <a class="ad" href="https://elencantocasarural.com/" target="_blank" rel="noopener"><span class="ad-left"><span class="ad-symbol" aria-hidden="true">⌂</span><span><span class="ad-kicker">Una escapada para cada estación</span><span class="ad-title" style="display:block">El Encanto · Casa Rural</span></span></span><span class="ad-arrow" aria-hidden="true">↗</span></a>
+        <section class="section" aria-labelledby="hours-title"><div class="section-head"><h2 id="hours-title" class="section-title">Las próximas horas</h2><span class="section-note">24 HORAS</span></div><div id="hourly" class="hourly" aria-label="Previsión de las próximas 24 horas"></div></section>
+        <section class="section" aria-labelledby="week-title"><div class="section-head"><h2 id="week-title" class="section-title">La semana</h2><span class="section-note">PRÓXIMOS 7 DÍAS</span></div><div id="week" class="week" role="group" aria-label="Previsión de siete días"></div><div id="day-detail" class="detail" aria-live="polite"></div></section>
+      </div>
+    </main>
+    <footer><span>Creado por Alfonso M. Martín Boza</span><span>Previsión · Open-Meteo</span></footer>
+  </div>
+  <script>
+  (() => {
+    'use strict';
+    const $ = (id) => document.getElementById(id);
+    const weatherNames = {0:'Despejado',1:'Mayormente despejado',2:'Parcialmente nublado',3:'Nublado',45:'Niebla',48:'Niebla engelante',51:'Llovizna ligera',53:'Llovizna',55:'Llovizna intensa',56:'Llovizna helada ligera',57:'Llovizna helada',61:'Lluvia ligera',63:'Lluvia',65:'Lluvia intensa',66:'Lluvia helada ligera',67:'Lluvia helada',71:'Nevada ligera',73:'Nieve',75:'Nevada intensa',77:'Granos de nieve',80:'Chubascos ligeros',81:'Chubascos',82:'Chubascos intensos',85:'Chubascos de nieve ligeros',86:'Chubascos de nieve intensos',95:'Tormenta',96:'Tormenta con granizo',99:'Tormenta fuerte con granizo'};
+    const description = code => weatherNames[code] || 'Condiciones variables';
+    const icon = (code, small=false, night=false) => {
+      const size = small ? 30 : 150;
+      const sun = night ? '<path d="M54 23a27 27 0 0 0 34 34A34 34 0 1 1 54 23Z" fill="#e4c78f"/>' : '<circle cx="83" cy="57" r="25" fill="#f2bd70"/><g stroke="#f2bd70" stroke-width="4" stroke-linecap="round"><path d="M83 15v9m0 66v9M41 57h9m66 0h9M53 27l7 7m47 47 7 7m0-61-7 7m-47 47-7 7"/></g>';
+      const cloud = '<path d="M43 111h62a22 22 0 0 0 0-44 32 32 0 0 0-61-4 24 24 0 0 0-1 48Z" fill="url(#cloud)" stroke="#dce9f5" stroke-width="2" stroke-linejoin="round"/>';
+      const rain = [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(code);
+      const snow = [71,73,75,77,85,86].includes(code);
+      const fog = [45,48].includes(code);
+      const extra = rain ? '<g stroke="#9bd4e7" stroke-width="4" stroke-linecap="round"><path d="m60 121-5 12m26-12-5 12m26-12-5 12"/></g>' : snow ? '<g fill="#b9dce8"><circle cx="61" cy="128" r="3"/><circle cx="82" cy="135" r="3"/><circle cx="103" cy="128" r="3"/></g>' : fog ? '<g stroke="#b6c8d6" stroke-width="4" stroke-linecap="round"><path d="M42 121h67m-59 12h57"/></g>' : '';
+      return `<svg width="${size}" height="${size}" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="cloud" x1="60" y1="63" x2="91" y2="113" gradientUnits="userSpaceOnUse"><stop stop-color="#f0f6fb"/><stop offset="1" stop-color="#adc5d9"/></linearGradient></defs>${sun}${cloud}${extra}</svg>`;
+    };
+    const showError = (title, message) => { $('loading').classList.add('hidden'); $('weather').classList.add('hidden'); $('error-title').textContent=title; $('error-message').textContent=message; $('error').classList.remove('hidden'); };
+    const showLoading = () => { $('error').classList.add('hidden'); $('weather').classList.add('hidden'); $('loading').classList.remove('hidden'); };
+    const formatDay = (date, options) => new Intl.DateTimeFormat('es-ES', options).format(new Date(`${date}T12:00:00`));
+    const render = data => {
+      window._data = data;
+      const {current:c, hourly:h, daily:d, timezone} = data;
+      $('location').textContent = data.city || 'Tu ubicación';
+      $('updated').textContent = new Intl.DateTimeFormat('es-ES',{timeZone:timezone,hour:'2-digit',minute:'2-digit'}).format(new Date()) + ' · HORA LOCAL';
+      $('current-temp').innerHTML = `${Math.round(c.temperature_2m)}<sup>°</sup>`;
+      $('current-desc').textContent = description(c.weather_code);
+      $('feels').textContent = `Sensación térmica ${Math.round(c.apparent_temperature)}°`;
+      $('wind').textContent = `${Math.round(c.wind_speed_10m)} km/h`;
+      $('humidity').textContent = `${Math.round(c.relative_humidity_2m)} %`;
+      const index = h.time.findIndex(t => new Date(t) >= new Date());
+      $('rain-current').textContent = `${h.precipitation_probability?.[index < 0 ? 0 : index] ?? 0} %`;
+      $('current-icon').innerHTML = icon(c.weather_code,false,!c.is_day);
+      const hours = $('hourly'); hours.replaceChildren();
+      const start = index < 0 ? 0 : index;
+      for(let i=start;i<Math.min(start+24,h.time.length);i++){
+        const time = new Intl.DateTimeFormat('es-ES',{timeZone:timezone,hour:'2-digit'}).format(new Date(h.time[i]));
+        const article = document.createElement('div'); article.className='hour';
+        article.innerHTML = `<div class="hour-time">${i===start?'AHORA':time}</div><div class="hour-icon">${icon(h.weather_code[i],true)}</div><div class="hour-temp">${Math.round(h.temperature_2m[i])}°</div><div class="hour-rain">${h.precipitation_probability?.[i] ? `↘ ${h.precipitation_probability[i]}%` : ''}</div>`;
+        hours.append(article);
+      }
+      const week = $('week'); week.replaceChildren();
+      d.time.forEach((date,i)=>{
+        const button=document.createElement('button'); button.type='button'; button.className=`day${i===0?' selected':''}`; button.dataset.day=String(i); button.setAttribute('aria-pressed',String(i===0));
+        const name=i===0?'Hoy':i===1?'Mañana':formatDay(date,{weekday:'long'});
+        button.innerHTML=`<span class="day-name">${name}</span><span class="day-desc">${description(d.weather_code[i])}</span><span class="day-icon">${icon(d.weather_code[i],true)}</span><span class="day-temp"><strong>${Math.round(d.temperature_2m_max[i])}°</strong></span><span class="day-temp">${Math.round(d.temperature_2m_min[i])}°</span>`;
+        button.addEventListener('click',()=>selectDay(i)); week.append(button);
+      });
+      selectDay(0);
+      $('loading').classList.add('hidden'); $('error').classList.add('hidden'); $('weather').classList.remove('hidden');
+    };
+    function selectDay(index){
+      const d=window._data?.daily; if(!d || index<0 || index>=d.time.length)return;
+      document.querySelectorAll('.day').forEach(el=>{const active=Number(el.dataset.day)===index;el.classList.toggle('selected',active);el.setAttribute('aria-pressed',String(active));});
+      const label=index===0?'Hoy':index===1?'Mañana':formatDay(d.time[index],{weekday:'long',day:'numeric',month:'long'});
+      $('day-detail').innerHTML=`<div><div class="detail-day">${label}</div><div class="detail-desc">${description(d.weather_code[index])}</div></div><div class="detail-values"><div class="detail-value"><small>Máxima</small><strong>${Math.round(d.temperature_2m_max[index])}°</strong></div><div class="detail-value"><small>Mínima</small><strong>${Math.round(d.temperature_2m_min[index])}°</strong></div><div class="detail-value"><small>Lluvia</small><strong>${Math.round(d.precipitation_probability_max?.[index]??0)}%</strong></div></div>`;
+    }
+    async function fetchWeather(latitude, longitude, city){
+      const params=new URLSearchParams({latitude:String(latitude),longitude:String(longitude),current:'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m',hourly:'temperature_2m,relative_humidity_2m,weather_code,precipitation_probability,wind_speed_10m',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',timezone:'auto',forecast_days:'7'});
+      const response=await fetch(`https://api.open-meteo.com/v1/forecast?${params}`);
+      if(!response.ok)throw new Error(`La previsión respondió con el error ${response.status}.`);
+      const data=await response.json();
+      if(!data.current||!data.hourly||!data.daily)throw new Error('La respuesta del servicio está incompleta.');
+      data.city = city || 'Tu ubicación';
+      render(data);
+    }
+    async function loadByCoords(lat, lon, city){
+      showLoading();
+      try{ await fetchWeather(lat, lon, city); }
+      catch(error){ showError('No pudimos cargar el tiempo', error.message || 'Comprueba tu conexión e inténtalo de nuevo.'); }
+    }
+    async function searchCity(name){
+      showLoading();
+      try{
+        const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=1&language=es&format=json`);
+        const g = await geo.json();
+        if(!g.results || !g.results.length) throw new Error(`No encontramos ninguna ciudad llamada “${name}”. Prueba con otro nombre.`);
+        const place = g.results[0];
+        await fetchWeather(place.latitude, place.longitude, place.name);
+      }catch(error){ showError('No pudimos cargar el tiempo', error.message || 'Comprueba tu conexión e inténtalo de nuevo.'); }
+    }
+    function locate(){
+      showLoading();
+      if(!('geolocation' in navigator)){ showError('Ubicación no disponible','Este navegador no permite el acceso a la ubicación. Escribe tu ciudad abajo.'); return; }
+      navigator.geolocation.getCurrentPosition(
+        pos => loadByCoords(pos.coords.latitude, pos.coords.longitude),
+        err => {
+          const messages={1:'Permite el acceso a tu ubicación o escribe tu ciudad abajo.',2:'No conseguimos determinar tu ubicación. Escribe tu ciudad abajo.',3:'La solicitud tardó demasiado. Escribe tu ciudad abajo.'};
+          showError('Necesitamos tu ubicación', messages[err.code] || 'No se pudo obtener la ubicación. Escribe tu ciudad abajo.');
+        },
+        {enableHighAccuracy:false, timeout:12000, maximumAge:600000}
+      );
+    }
+    $('retry').addEventListener('click', locate);
+    $('city-form').addEventListener('submit', e => { e.preventDefault(); const v = $('city-input').value.trim(); if(v) searchCity(v); });
+    locate();
+  })();
+  </script>
+  <script>
+  (() => {
+    const banner = document.getElementById('install-banner');
+    const installButton = document.getElementById('install-app');
+    const dismissButton = document.getElementById('dismiss-install');
+    const dismissedKey = 'el-tiempo-install-dismissed';
+    const alreadyInstalled = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    let deferredPrompt = null;
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(error => console.error('No se pudo registrar el service worker:', error)));
+    }
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      deferredPrompt = event;
+      if (!alreadyInstalled() && localStorage.getItem(dismissedKey) !== 'true') banner.classList.remove('hidden');
+    });
+    installButton.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      banner.classList.add('hidden');
+    });
+    dismissButton.addEventListener('click', () => {
+      localStorage.setItem(dismissedKey, 'true');
+      banner.classList.add('hidden');
+    });
+    window.addEventListener('appinstalled', () => {
+      deferredPrompt = null;
+      banner.classList.add('hidden');
+      localStorage.removeItem(dismissedKey);
+    });
+  })();
+  </script>
+</body>
+</html>
